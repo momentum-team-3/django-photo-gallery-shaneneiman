@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h3 class="title">{{ gallery.title }}</h3>
+<div class="text">{% for user in user_list %} {{ user.username }}, {% endfor %}</div><br>
+<div class="text">STARTED {{ gallery.date_added }} | UPDATED {{ gallery.date_updated }}</div><br>
+{% if user.is_authenticated and request.user in gallery.gallery_of.all %}
+<p>
+    <a class="link" href="{% url 'edit_gallery' gallery_pk=gallery.pk %}"><button>Edit Gallery</button></a>
+    <a class="link" href="{% url 'delete_gallery' gallery_pk=gallery.pk %}"><button>Delete Gallery</button></a>
+</p>
+{% endif %}
+<h2 class="title">Photos</h2>
+<div class="flex-container">
+    {% if photos is not None %}
+    {% for photo in photos %}
+    <div class="flex-item">
+        <a href="{% url 'view_photo' photo_pk=photo.pk %}"><img src="{{ photo.photo_thumb.url }}"/></a>
+    </div>
+    {% empty %}
+        {% if user.is_authenticated and request.user == gallery.gallery_of.all %}
+        <p class="text">You have no photos. Add some now!</p>
+        {% else %}
+        <p class="text">There are no photos in this gallery yet!</p>
+        {% endif %}
+    {% endfor %}
+{% endif %}
+</div>
+{% endblock %}

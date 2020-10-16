@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Leave a comment</h2>
+<div>
+    <form action="{% url 'add_comment' photo_pk=photo_pk %}" method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <div>
+            <button type="submit">Comment</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

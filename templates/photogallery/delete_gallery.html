@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2 class="title">Delete Gallery</h2>
+<p class="text">Do you want to delete your gallery, but keep the photos?</p>
+<p class="text">If yes, continue below. If you want to delete the photos too, follow follow this <a href="{% url 'delete_gallery_and_photos' gallery.pk %}">link</a>.</p>
+
+<p>
+    <form action="{% url 'delete_gallery' gallery.pk %}" method="POST">
+        {% csrf_token %}
+        <p>Do you want to delete this gallery?</p>
+        <div>
+            <button type="submit">Delete</button><br>
+            <a href="{% url 'view_gallery' gallery.pk %}">Cancel</a>
+        </div>
+    </form>
+</p>
+{% endblock %}

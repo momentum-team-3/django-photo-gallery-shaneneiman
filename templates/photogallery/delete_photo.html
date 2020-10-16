@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2 class ="title">Delete Photo</h2>
+<p>
+    <form action="{% url 'delete_photo' photo.pk %}" method="POST">
+        {% csrf_token %}
+        <p>Do you want to delete this photo?</p>
+        <div>
+            <button type="submit">Delete</button><br>
+            <a href="{% url 'view_photo' photo.pk %}">Cancel</a>
+        </div>
+    </form>
+</p>
+{% endblock %}

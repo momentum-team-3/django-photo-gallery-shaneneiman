@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div>
+    <img src="{{ photo.photo_large.url }}"/>
+</div>
+<h4 class="text">
+    <a id="toggle-star" data-photo-id="{{ photo_pk }}">
+        {% if starred_photo == True %}
+            &#9733;
+        {% else %}
+            &#9734;
+        {% endif %}
+    </a>{{ photo.num_stars }} STARS | {{ photo.num_comments }} COMMENTS
+</h4>
+<div class="text">{{ photo.photo_by }} | {{ photo.camera }} | {{ photo.photo_added_date }}</div><br>
+{% if gallery is not None %}
+<a href="{% url 'view_gallery' gallery_pk=gallery.pk %}"><button>Visit Gallery</button></a><br>
+{% endif %}
+
+{% if user.is_authenticated and request.user == photo.photo_by %}
+<div>
+    <a href="{% url 'delete_photo' photo_pk=photo.pk %}"><button>Delete Photo</button></a>
+    <button id="editphoto-button">Edit Photo</button>
+</div>
+<div id="editphoto-form" class="hidden">
+    <form class="form-style" action="{% url 'edit_photo' photo_pk=photo.pk %}"method="POST">
+        {% csrf_token %}
+        <label for="camera">Camera</label>
+        <div>{{ form.camera }}</div><br>
+        <label for="public_photo">Public</label>
+        <div>{{ form.public_photo }}</div><br>
+        <div>
+            <button type="submit">Update Photo</button>
+            <a href="{% url 'view_photo' photo_pk=photo.pk %}"><button>Cancel Update</button></a> 
+        </div>
+    </form>
+</div>
+{% endif %}
+
+<h4 class="title">Comments</h4>
+<div><button id="addcomment-button">Add Comment</button></div>
+<div id="addcomment-form" class="hidden">
+    <form class="form-style" action="{% url 'add_comment' photo_pk=photo_pk %}" method="POST">
+        {% csrf_token %}
+        {{ CommentForm.as_p }}
+        <button type="submit">Add Comment</button>
+    </form>
+</div><br>
+{% if comments is not None %}
+    {% for comment in comments %}
+    <div class="flex-item">
+        <div class="text"><b>{{ comment.comment_by }}</b>   {{ comment.body }}</div>
+    </div>
+    {% empty %}
+    <p class="text">No comments yet!</p>
+    {% endfor %}
+{% endif %}
+
+
+<script>
+    const toggleStarLink = document.querySelector("#toggle-star")
+    toggleStarLink.addEventListener("click", function (e) {
+        e.preventDefault()
+        const photoId = toggleStarLink.dataset.photoId
+        fetch(`/photo/${photoId}/starred/`, {
+            method: "POST"
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.starred_photo) {
+                toggleStarLink.innerHTML = "&#9733;"
+            } else {
+                toggleStarLink.innerHTML = "&#9734;"
+            }
+        })
+    })
+
+    // Show Forms and Hide Buttons
+    function makeAddCommentFormVisable () {
+        let addCommentFormSection = document.querySelector("#addcomment-form")
+        let addCommentButton = document.querySelector("#addcomment-button")
+        addCommentFormSection.classList.remove("hidden")
+        addCommentButton.classList.add("hidden")
+    }
+
+    function makeEditPhotoFormVisable () {
+        let editPhotoFormSection = document.querySelector("#editphoto-form")
+        let editPhotoButton = document.querySelector("#editphoto-button")
+        editPhotoFormSection.classList.remove("hidden")
+        editPhotoButton.classList.add("hidden")
+    }
+
+    let addComment = document.querySelector("#addcomment-button")
+    if (addComment) {
+        addComment.addEventListener("click", makeAddCommentFormVisable)
+    }
+    
+    let editPhoto = document.querySelector("#editphoto-button")
+    if (editPhoto) {
+        editPhoto.addEventListener("click", makeEditPhotoFormVisable)
+    }
+</script>
+{% endblock %}

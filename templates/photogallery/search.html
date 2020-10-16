@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2 class="title">Search Galleries and Photos</h2>
+<div class="flex-item">
+    <form class="form-style" action="{% url 'search' %}" method="GET">
+        <input type="search" name="q" placeholder="Seach Photos and Galleries" value="{{query}}">
+        <p>
+            <button type="submit">Search</button>
+        </p>
+    </form>
+</div>
+
+
+<h3 class="title">Galleries</h3>
+<div class="flex-container">
+    {% if galleries is not None %}
+    {% for gallery in galleries %}
+    <div class="flex-item">
+        <div class="text">{{ gallery.title }}</div>
+        <a href="{% url 'view_gallery' gallery.pk %}"><img src="{{ gallery.photos.first.photo_thumb.url }}"></a>
+    </div><br>
+    {% empty %}
+        <p class="text">There are no galleries matching your search</p>
+    {% endfor %}
+{% endif %}
+</div>
+
+
+<h3 class="title">Photos</h3>
+<div class="flex-container">
+    {% if photos is not None %}
+    {% for photo in photos %}
+        <div class="flex-item">
+            <a href="{% url 'view_photo' photo_pk=photo.pk %}"><img src="{{ photo.photo_thumb.url }}"/></a>
+        </div>
+    {% empty %}
+        <p class="text">There are no photos matching your search</p>
+    {% endfor %}
+{% endif %}
+</div>
+{% endblock %}

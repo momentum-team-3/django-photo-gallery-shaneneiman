@@ -1,0 +1,126 @@
+* {
+    box-sizing: border-box;
+    padding: 0;
+    border: 0;
+    font-family: arial;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+header {
+    background-size: cover;
+    background-color: rgba(206, 150, 47, 0.884);
+    color: rgb(255, 255, 255);
+    text-align: center;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+body {
+    background-color: rgb(207, 203, 203);
+    padding: 20 px;
+}
+
+#header-nav {
+    position: fixed;
+    top: 0;
+    width: 100%;
+}
+
+nav > a {
+    color: rgb(255, 255, 255);
+    text-decoration: none;
+    text-transform: uppercase;
+    padding: 10px;
+}
+
+nav > a:hover {
+    font-weight: bold;
+}
+
+button {
+    background-color: rgba(206, 150, 47, 0.884);
+    color: rgb(255, 255, 255);
+    padding: 10px;
+}
+
+button:hover {
+    font-weight: bold;
+}
+
+button:active {
+    background-color: rgb(255, 255, 255);
+    color: rgba(206, 150, 47, 0.884);
+}
+
+.flex-container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.flex-item {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    flex-grow: 0;
+    flex-shrink: 0;
+    flex-basis: 25%;
+    padding: 10px;
+}
+
+#home-container {
+    display: flex;
+    flex-direction: column;
+    padding-top: 100px;
+}
+
+.title {
+    font-weight: bold;
+    font-size: larger;
+    text-transform: uppercase;
+    color: rgb(255, 255, 255);
+}
+
+.link {
+    font-size: smaller;
+    color: rgb(255, 255, 255);
+}
+
+.link:hover {
+    font-weight: bold;
+    color: rgba(206, 150, 47, 0.884);
+}
+
+.text {
+    color: rgb(255, 255, 255);
+}
+
+.form-style {
+    font-family: inherit;
+    padding: 10px;
+}
+
+.form-style label {
+	margin:0 0 3px 0;
+	padding:0px;
+	display: block;
+    font-weight: bold;
+    color: rgb(255, 255, 255);
+}
+
+.form-style input[type=text], .form-style input[type=search] {
+    box-shadow: 0 0 8px rgba(206, 150, 47, 0.884);
+    border: 1px solid rgba(206, 150, 47, 0.884);
+}
+
+.form-style input[type=file] {
+    color: rgb(255, 255, 255);
+}
+
+.hidden {
+    display: none;
+}

@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% if user.is_authenticated %}
+<h2 class="title">{{ user }}</h2>
+{% if user.profile_photo is not None %}
+<div><img src="{{ user.profile_photo_thumb.url }}"/></div><br>
+{% else %}
+<div>No profile photo has been uploaded</div>
+{% endif %}
+<div class="text">{{ user.bio }}</div><br>
+
+<div>
+    <a href="#"><button>Delete Profile</button></a>
+    
+    <button id="updateprofile-button">Edit Profile</button>
+    
+
+    <a class="link" href="{% url 'socialaccount_connections' %}"><button>Manage Social Accounts</button></a>
+</div>
+
+<div id="updateprofile-form" class="hidden">
+    <form class="form-style" action ="{% url 'profile' %}" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Update Profile</button>
+    </form>
+</div><br>
+
+<div class="text"> Joined: {{ user.date_joined }}</div>
+
+{% endif %}
+
+
+<script>
+     function makeUpdateProfileFormVisable () {
+        let updateProfileFormSection = document.querySelector("#updateprofile-form")
+        let updateProfileButton = document.querySelector("#updateprofile-button")
+        updateProfileFormSection.classList.remove("hidden")
+        updateProfileButton.classList.add("hidden")
+    }
+
+    let updateProfile = document.querySelector("#updateprofile-button")
+    if (updateProfile) {
+        updateProfile.addEventListener("click", makeUpdateProfileFormVisable)
+    }
+</script>
+{% endblock %}

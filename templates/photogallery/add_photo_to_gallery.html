@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2 class="title">Add a photo to your gallery</h2>
+<div>
+    <form action="{% url 'add_photo_to_gallery' gallery_pk=gallery_pk %}" method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <div>
+            <button type="submit">Add Photo</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

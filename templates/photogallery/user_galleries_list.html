@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2 class="title">My Galleries</h2><br>
+<div>
+    {% if galleries is not None %}
+    {% for gallery in galleries %}
+    <div>
+        <div class="text">{{ gallery.title }}</div>
+        <a href="{% url 'view_gallery' gallery.pk %}"><img src="{{ gallery.photos.first.photo_thumb.url }}"></a>
+    </div><br>
+    {% empty %}
+    <p class="text">You have no galleries. Start one now!</p>
+    <a class="link" href="{% url 'add_gallery' %}">Create Gallery</a>
+    {% endfor %}
+    {% endif %}
+</div>
+{% endblock %}

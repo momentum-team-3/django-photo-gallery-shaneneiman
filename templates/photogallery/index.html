@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block content %}
+    {% if user.is_authenticated %}
+    <h2 class="title">Welcome, {{ request.user }}!</h2>
+    <p>
+        <a href="{% url 'add_photo' %}"><button>Add Photo</button></a>
+        <a href="{% url 'add_gallery' %}"><button>Create Gallery</button></a>
+    </p>
+    {% endif %}
+    <h3 class="title">Top Photos</h3>
+    <div class="flex-container">
+        {% for photo in photos %}
+        <div class="flex-item">
+            <a href="{% url 'view_photo' photo_pk=photo.pk %}"><img src="{{ photo.photo_thumb.url }}"/></a>
+        </div>
+    {% endfor %}
+    </div>
+    <h3 class="title">Photos</h3>
+    <div class="flex-container">
+        {% for photo in all_photos %}
+        <div class="flex-item">
+            <a href="{% url 'view_photo' photo_pk=photo.pk %}"><img src="{{ photo.photo_thumb.url }}"/></a>
+        </div>
+    {% endfor %}
+    </div>
+{% endblock %}

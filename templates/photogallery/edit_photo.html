@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2 class="title">Edit Photo</h2>
+<div>
+    <form class="form-style" action="{% url 'edit_photo' photo_pk=photo.pk %}"method="POST">
+        {% csrf_token %}
+        <label for="camera">Camera</label>
+        <div>{{ form.camera }}</div><br>
+        <label for="public_photo">Public</label>
+        <div>{{ form.public_photo }}</div><br>
+        <div>
+            <button type="submit">Update Photo</button>
+           <a class="link" href="{% url 'view_photo' photo_pk=photo.pk %}">Cancel Update</a> 
+        </div>
+    </form>
+</div>
+{% endblock %}
+

@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+
+{% block meta %}
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+{% endblock %}
+
+{% block content %}
+<h2 class="title">Edit Gallery</h2>
+<div>
+    <form class="form-style" action="{% url 'edit_gallery' gallery_pk=gallery.pk %}"method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <div>
+            <button type="submit">Update Gallery</button>
+           <a href="{% url 'view_gallery' gallery_pk=gallery.pk %}"><button>Cancel Update</button></a> 
+        </div>
+    </form>
+</div>
+<h2 class="title">Gallery Photos</h2>
+<div id="current-photos" class="flex-container">
+    {% for photo in photos %}
+    <div class="flex-item">
+        <a href="{% url 'view_photo' photo_pk=photo.pk %}"><img src="{{ photo.photo_thumb.url }}"/></a>
+    </div>
+    {% empty %}
+    <p class="text">There are no photos in this gallery yet!</p>
+    {% endfor %}
+</div>
+<h2 class="title">Add more Photos to your Gallery</h2>
+<form id="galleryphoto-form" data-photo-id="{{ gallery.id }}" class="form-style">
+    <div>
+        <label for="photos">Photos to upload</label>
+        <input type="file" id="photos" multiple><br><br>
+    </div>
+    <div>
+        <button type="submit">Upload Photos</button>
+    </div>
+</form>
+
+<script>
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+const csrftoken = getCookie('csrftoken')
+
+const photoInput = document.querySelector("#photos")
+const galleryPhotoForm = document.querySelector("#galleryphoto-form")
+const currentPhotos = document.querySelector("#current-photos")
+let photoList = []
+
+photoInput.addEventListener("change", function () {
+    photoList = []
+    for (const photo of photoInput.files) {
+        photoList.push(photo)
+    }
+    console.log(photoList)
+})
+
+galleryPhotoForm.addEventListener("submit", function (event) {
+    event.preventDefault()
+    for (const photo of photoList) {
+        sendPhoto(photo)
+    }
+})
+
+const sendPhoto = function (photo) {
+    const filename = photo.name
+    const gallery_pk = galleryPhotoForm.dataset.photoId
+    const url = `/api/galleries/${gallery_pk}/addphoto/`
+    axios.post(url, photo, {
+        headers: {
+      'Content-Disposition': `attachment; filename=${filename}`,
+      'Content-Type': photo.type,
+      'X-CSRFToken': csrftoken
+    },
+    withCredentials: true
+    }).then(res => {
+        const newPhoto = document.createElement("img")
+        newPhoto.src = res.data.photo_thumb
+        currentPhotos.appendChild(newPhoto)
+    })
+}
+</script>
+{% endblock %}
